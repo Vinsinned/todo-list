@@ -34,9 +34,10 @@ const appendTodo = (title, description, dueDate, priority, type) => {
             icon.classList.toggle('extend');
             if (icon.classList.contains('extend')) {
                 icon.textContent = 'remove';
-                descriptionDiv.appendChild(todoDescription);
-                todoDescription.textContent = description;
                 todoDiv.appendChild(descriptionDiv);
+                descriptionDiv.appendChild(todoDescription);
+                todoDescription.className = 'description';
+                todoDescription.textContent = description;
             } else {
                 todoDescription.innerHTML = '';
                 icon.textContent = 'add';
@@ -44,7 +45,9 @@ const appendTodo = (title, description, dueDate, priority, type) => {
         });
         deleteIcon.addEventListener('click', () => {
             todoDiv.removeChild(headerDiv);
-            todoDiv.removeChild(descriptionDiv);
+            if (todoDescription.classList.contains('description')) {
+                todoDiv.removeChild(descriptionDiv);
+            }
         })
     } else if (type == 'checklist') {
         let headerDiv = document.createElement('div');
