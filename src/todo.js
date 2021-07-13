@@ -1,21 +1,78 @@
 import './style.css';
 
 const appendTodo = (title, description, dueDate, priority, type) => {
-    console.log(title);
-    console.log(description);
-    console.log(dueDate);
-    console.log(priority);
-    console.log(type);
+    let todoDiv = document.createElement('div');
+    let content = document.querySelector('#content');
+    content.appendChild(todoDiv);
+    todoDiv.className = 'todo';
+    let deleteIcon = document.createElement('p');
+    let icon = document.createElement('p');
     let todoTitle = document.createElement('h2');
     let todoDescription = document.createElement('p');
     let todoDate = document.createElement('p');
+    deleteIcon.className = 'material-icons';
+    icon.className = 'material-icons';
+    deleteIcon.textContent = 'close';
+    deleteIcon.id = 'close';
+    icon.textContent = 'add';
+    icon.id = 'add';
+    todoTitle.textContent = title;
+    todoDescription.textContent = description;
+    todoDescription.style.cssText = 'display: block'
+    todoDate.textContent = dueDate;
     if (type == 'note') {
-        
+        let headerDiv = document.createElement('div');
+        let descriptionDiv = document.createElement('div');
+        todoDiv.appendChild(headerDiv);
+        headerDiv.appendChild(icon)
+        headerDiv.appendChild(todoTitle);
+        headerDiv.appendChild(todoDate);
+        headerDiv.appendChild(deleteIcon);
+        headerDiv.style.cssText = 'display: flex; align-items: center';
+        todoDate.style.cssText = 'margin-left: auto;'
+        icon.addEventListener('click', () => {
+            icon.classList.toggle('extend');
+            if (icon.classList.contains('extend')) {
+                icon.textContent = 'remove';
+                descriptionDiv.appendChild(todoDescription);
+                todoDescription.textContent = description;
+                todoDiv.appendChild(descriptionDiv);
+            } else {
+                todoDescription.innerHTML = '';
+                icon.textContent = 'add';
+            }
+        });
+        deleteIcon.addEventListener('click', () => {
+            todoDiv.removeChild(headerDiv);
+            todoDiv.removeChild(descriptionDiv);
+        })
+    } else if (type == 'checklist') {
+        let headerDiv = document.createElement('div');
+        icon.textContent = 'check_box_outline_blank';
+        todoDiv.appendChild(headerDiv);
+        headerDiv.appendChild(icon);
+        headerDiv.appendChild(todoTitle);
+        headerDiv.appendChild(todoDate);
+        headerDiv.appendChild(deleteIcon);
+        headerDiv.style.cssText = 'display: flex; align-items: center';
+        todoDate.style.cssText = 'margin-left: auto;';
+        icon.addEventListener('click', () => {
+            icon.classList.toggle('box');
+            if (icon.classList.contains('box')) {
+                icon.textContent = 'check_box';
+                todoTitle.style.cssText = 'text-decoration: line-through';
+            } else {
+                icon.textContent = 'check_box_outline_blank';
+                todoTitle.style.cssText = 'text-decoration: none;';
+            }
+        })
+        deleteIcon.addEventListener('click', () => {
+            todoDiv.removeChild(headerDiv);
+        })
     }
 }
 const createTodo = () => {
     let today = new Date();
-    let content = document.querySelector('#content');
     let div = document.createElement('div');
     div.id = 'prompt';
     div.style.cssText = `background-color: bisque;
@@ -127,6 +184,7 @@ const createTodo = () => {
     submit.addEventListener('click', () => {
         if (titleInput.value != '' || descriptionInput.value != '') {
             div.innerHTML = '';
+            div.style.cssText = 'color: white';
             let form1Value = null;
             let form2Value = null;
             if (priorityInput1.checked) {
@@ -142,6 +200,7 @@ const createTodo = () => {
             submitPressed.startAppend(titleInput.value, descriptionInput.value, dateInput.value, form1Value, form2Value);
         } else {
             divReminder.innerHTML = '';
+            divReminder.style.cssText = '';
             let reminder = document.createElement('p');
             reminder.className = 'reminder';
             reminder.textContent = 'Please fill out the form!';
@@ -153,11 +212,16 @@ const createTodo = () => {
 
 const submitPressed = (() => {
     const startAppend = (title, description, dueDate, priority, type) => {
-        console.log('yes');
         appendTodo(title, description, dueDate, priority, type);
     }
     return {
         startAppend
+    }
+})();
+
+const deleteList = (() => {
+    const deleteTodo = (div) => {
+        document.body.removeChild(div);
     }
 })();
 

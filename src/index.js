@@ -6,5 +6,4 @@ document.body.appendChild(button);
 
 button.addEventListener('click', ()=> {
     createTodo();
-})
-
+});
