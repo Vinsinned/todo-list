@@ -1,9 +1,7 @@
 import './style.css';
+import { todoDiv, content } from './index.js';
 
 const appendTodo = (title, description, dueDate, priority, type) => {
-    let todoDiv = document.createElement('div');
-    let content = document.querySelector('#content');
-    content.appendChild(todoDiv);
     todoDiv.className = 'todo';
     let deleteIcon = document.createElement('p');
     let icon = document.createElement('p');
@@ -26,6 +24,9 @@ const appendTodo = (title, description, dueDate, priority, type) => {
         todoDiv.appendChild(headerDiv);
         headerDiv.appendChild(icon)
         headerDiv.appendChild(todoTitle);
+        if (priority == 'yes') {
+            todoTitle.style.cssText = 'color: red';
+        }
         headerDiv.appendChild(todoDate);
         headerDiv.appendChild(deleteIcon);
         headerDiv.style.cssText = 'display: flex; align-items: center';
@@ -55,6 +56,9 @@ const appendTodo = (title, description, dueDate, priority, type) => {
         todoDiv.appendChild(headerDiv);
         headerDiv.appendChild(icon);
         headerDiv.appendChild(todoTitle);
+        if (priority == 'yes') {
+            todoTitle.style.cssText = 'color: red';
+        }
         headerDiv.appendChild(todoDate);
         headerDiv.appendChild(deleteIcon);
         headerDiv.style.cssText = 'display: flex; align-items: center';
@@ -73,6 +77,7 @@ const appendTodo = (title, description, dueDate, priority, type) => {
             todoDiv.removeChild(headerDiv);
         })
     }
+    return {todoDiv}
 }
 const createTodo = () => {
     let today = new Date();
@@ -213,18 +218,22 @@ const createTodo = () => {
     })
 }
 
+let list = [];
 const submitPressed = (() => {
     const startAppend = (title, description, dueDate, priority, type) => {
-        appendTodo(title, description, dueDate, priority, type);
+        if (priority == 'yes') {
+            list.unshift([title, description, dueDate, priority, type]);
+        } else {
+            list.push([title, description, dueDate, priority, type]);
+        }
+        let i;
+        todoDiv.innerHTML = '';
+        for (i = 0; i < list.length; i++) {
+            appendTodo(list[i][0], list[i][1], list[i][2], list[i][3], list[i][4]);
+        }
     }
     return {
         startAppend
-    }
-})();
-
-const deleteList = (() => {
-    const deleteTodo = (div) => {
-        document.body.removeChild(div);
     }
 })();
 
