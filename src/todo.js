@@ -1,85 +1,8 @@
 import './style.css';
 import { todoDiv, content } from './index.js';
 
-const appendTodo = (title, description, dueDate, priority, type) => {
-    todoDiv.className = 'todo';
-    let deleteIcon = document.createElement('p');
-    let icon = document.createElement('p');
-    let todoTitle = document.createElement('h2');
-    let todoDescription = document.createElement('p');
-    let todoDate = document.createElement('p');
-    deleteIcon.className = 'material-icons';
-    icon.className = 'material-icons';
-    deleteIcon.textContent = 'close';
-    deleteIcon.id = 'close';
-    icon.textContent = 'add';
-    icon.id = 'add';
-    todoTitle.textContent = title;
-    todoDescription.textContent = description;
-    todoDescription.style.cssText = 'display: block'
-    todoDate.textContent = dueDate;
-    if (type == 'note') {
-        let headerDiv = document.createElement('div');
-        let descriptionDiv = document.createElement('div');
-        todoDiv.appendChild(headerDiv);
-        headerDiv.appendChild(icon)
-        headerDiv.appendChild(todoTitle);
-        if (priority == 'yes') {
-            todoTitle.style.cssText = 'color: red';
-        }
-        headerDiv.appendChild(todoDate);
-        headerDiv.appendChild(deleteIcon);
-        headerDiv.style.cssText = 'display: flex; align-items: center';
-        todoDate.style.cssText = 'margin-left: auto;'
-        icon.addEventListener('click', () => {
-            icon.classList.toggle('extend');
-            if (icon.classList.contains('extend')) {
-                icon.textContent = 'remove';
-                todoDiv.appendChild(descriptionDiv);
-                descriptionDiv.appendChild(todoDescription);
-                todoDescription.className = 'description';
-                todoDescription.textContent = description;
-            } else {
-                todoDescription.innerHTML = '';
-                icon.textContent = 'add';
-            }
-        });
-        deleteIcon.addEventListener('click', () => {
-            todoDiv.removeChild(headerDiv);
-            if (todoDescription.classList.contains('description')) {
-                todoDiv.removeChild(descriptionDiv);
-            }
-        })
-    } else if (type == 'checklist') {
-        let headerDiv = document.createElement('div');
-        icon.textContent = 'check_box_outline_blank';
-        todoDiv.appendChild(headerDiv);
-        headerDiv.appendChild(icon);
-        headerDiv.appendChild(todoTitle);
-        if (priority == 'yes') {
-            todoTitle.style.cssText = 'color: red';
-        }
-        headerDiv.appendChild(todoDate);
-        headerDiv.appendChild(deleteIcon);
-        headerDiv.style.cssText = 'display: flex; align-items: center';
-        todoDate.style.cssText = 'margin-left: auto;';
-        icon.addEventListener('click', () => {
-            icon.classList.toggle('box');
-            if (icon.classList.contains('box')) {
-                icon.textContent = 'check_box';
-                todoTitle.style.cssText = 'text-decoration: line-through';
-            } else {
-                icon.textContent = 'check_box_outline_blank';
-                todoTitle.style.cssText = 'text-decoration: none;';
-            }
-        })
-        deleteIcon.addEventListener('click', () => {
-            todoDiv.removeChild(headerDiv);
-        })
-    }
-    return {todoDiv}
-}
-const createTodo = () => {
+const todo = (currentTab) => {
+    const createTodo = () => {
     let today = new Date();
     let div = document.createElement('div');
     div.id = 'prompt';
@@ -89,12 +12,11 @@ const createTodo = () => {
     padding-top: 10px;
     padding-bottom: 10px;
     margin: auto;
-    position: relative;`
+    position: relative;`;
 
     let divReminder = document.createElement('div');
     divReminder.id = 'reminder';
     let form1 = document.createElement('form');
-    let form2 = document.createElement('form');
     //Title
     let titleQuestion = document.createElement('p');
     let titleInput = document.createElement('input');
@@ -110,11 +32,6 @@ const createTodo = () => {
     let priorityLabel2 = document.createElement('label');
     let priorityInput1 = document.createElement('input');
     let priorityInput2 = document.createElement('input');
-    let typeQuestion = document.createElement('p');
-    let typeLabel1 = document.createElement('label');
-    let typeLabel2 = document.createElement('label');
-    let typeInput1 = document.createElement('input');
-    let typeInput2 = document.createElement('input');
     let submit = document.createElement('button');
 
     //Title
@@ -142,22 +59,6 @@ const createTodo = () => {
     priorityLabel1.textContent = 'Yes';
     priorityLabel2.setAttribute('for', 'priority');
     priorityLabel2.textContent = 'No';
-    //Type
-    form2.name = 'type';
-    form2.id = 'type';
-    typeQuestion.textContent = 'Type:';
-    typeInput1.name = 'listType';
-    typeInput1.type = 'radio';
-    typeInput1.value = 'note';
-    typeInput1.checked = true;
-    typeInput2.name = 'listType';
-    typeInput2.type = 'radio';
-    typeInput2.value = 'checklist';
-    typeLabel1.setAttribute('for', 'type');
-    typeLabel1.textContent = 'Note';
-    typeLabel2.setAttribute('for', 'type');
-    typeLabel2.textContent = 'Checklist';
-    
 
     content.appendChild(div);
     //Title
@@ -176,36 +77,22 @@ const createTodo = () => {
     priorityLabel1.appendChild(priorityInput1);
     form1.appendChild(priorityLabel2);
     priorityLabel2.appendChild(priorityInput2);
-    //Type
-    div.appendChild(typeQuestion)
-    div.appendChild(form2);
-    form2.appendChild(typeLabel1);
-    typeLabel1.appendChild(typeInput1);
-    form2.appendChild(typeLabel2);
-    typeLabel2.appendChild(typeInput2);
-
 
     div.appendChild(submit);
     div.appendChild(divReminder);
     submit.textContent = 'Submit';
-
     submit.addEventListener('click', () => {
         if (titleInput.value != '' || descriptionInput.value != '') {
             div.innerHTML = '';
             div.style.cssText = 'color: white';
-            let form1Value = null;
-            let form2Value = null;
+            let form1Value;
+            let form2Value;
             if (priorityInput1.checked) {
                 form1Value = priorityInput1.value;
             } else if (priorityInput2.checked) {
                 form1Value = priorityInput2.value;
             }
-            if (typeInput1.checked) {
-                form2Value = typeInput1.value;
-            } else if (typeInput2.checked) {
-                form2Value = typeInput2.value;
-            }
-            submitPressed.startAppend(titleInput.value, descriptionInput.value, dateInput.value, form1Value, form2Value);
+            startAppend(titleInput.value, descriptionInput.value, dateInput.value, form1Value);
         } else {
             divReminder.innerHTML = '';
             divReminder.style.cssText = '';
@@ -216,25 +103,95 @@ const createTodo = () => {
             divReminder.appendChild(reminder);
         }
     })
-}
-
-let list = [];
-const submitPressed = (() => {
-    const startAppend = (title, description, dueDate, priority, type) => {
+    }
+    //Called by startAppend
+    const appendTodo = (i) => {
+        //loop for each array in a list of arrays (for index attribute)
+        todoDiv.className = 'todo';
+        //creates elements to input array info
+        let deleteIcon = document.createElement('p');
+        let checklistIcon = document.createElement('p');
+        let icon = document.createElement('p');
+        let todoTitle = document.createElement('h2');
+        let todoDescription = document.createElement('p');
+        let todoDate = document.createElement('p');
+        deleteIcon.className = 'material-icons';
+        checklistIcon.className = 'material-icons';
+        icon.className = 'material-icons';
+        deleteIcon.textContent = 'close';
+        checklistIcon.textContent = 'check_box_outline_blank'
+        deleteIcon.id = 'close';
+        deleteIcon.setAttribute('data-index', currentTab.indexOf(currentTab[i]));
+        icon.textContent = 'add';
+        icon.id = 'add';
+        todoTitle.textContent = currentTab[i][0];
+        todoDescription.textContent = currentTab[i][1];
+        todoDescription.style.cssText = 'display: block'
+        todoDate.textContent = currentTab[i][2];
+        //checks to see if list is note
+        let headerDiv = document.createElement('div');
+        let descriptionDiv = document.createElement('div');
+        todoDiv.appendChild(headerDiv);
+        headerDiv.appendChild(icon)
+        headerDiv.appendChild(todoTitle);
+        //check priority
+        if (currentTab[i][3] == 'yes') {
+            todoTitle.className = 'red';
+        }
+        headerDiv.appendChild(todoDate);
+        headerDiv.appendChild(checklistIcon);
+        headerDiv.appendChild(deleteIcon);
+        headerDiv.style.cssText = 'display: flex; align-items: center';
+        todoDate.style.cssText = 'margin-left: auto;'
+        //expand icon event listener
+        icon.addEventListener('click', () => {
+            icon.classList.toggle('extend');
+            if (icon.classList.contains('extend')) {
+                icon.textContent = 'remove';
+                todoDiv.appendChild(descriptionDiv);
+                descriptionDiv.appendChild(todoDescription);
+                todoDescription.className = 'description';
+            } else {
+                todoDiv.removeChild(descriptionDiv)
+                icon.textContent = 'add';
+            }
+        });
+        //delete icon event listener
+        deleteIcon.addEventListener('click', () => {
+            todoDiv.removeChild(headerDiv);
+            if (todoDescription.classList.contains('description')) {
+                todoDiv.removeChild(descriptionDiv);
+            }
+            currentTab.splice(deleteIcon.getAttribute('data-index'), 1);
+        });
+        checklistIcon.addEventListener('click', () => {
+            checklistIcon.classList.toggle('box');
+            if (checklistIcon.classList.contains('box')) {
+                checklistIcon.textContent = 'check_box';
+                todoTitle.style.cssText = 'text-decoration: line-through';
+            } else {
+                checklistIcon.textContent = 'check_box_outline_blank';
+                todoTitle.style.cssText = 'text-decoration: none;';
+            }
+        })
+    return deleteIcon;
+    }
+    //Called by createTodo to append new list
+    const startAppend = (title, description, dueDate, priority) => {
         if (priority == 'yes') {
-            list.unshift([title, description, dueDate, priority, type]);
+            console.log(title, description, dueDate, priority);
+            currentTab.unshift([title, description, dueDate, priority]);
+            todoDiv.innerHTML = '';
         } else {
-            list.push([title, description, dueDate, priority, type]);
+            currentTab.push([title, description, dueDate, priority]);
+            todoDiv.innerHTML = '';
         }
         let i;
-        todoDiv.innerHTML = '';
-        for (i = 0; i < list.length; i++) {
-            appendTodo(list[i][0], list[i][1], list[i][2], list[i][3], list[i][4]);
+        for (i = 0; i < currentTab.length; i++) {
+            appendTodo(i);
         }
     }
-    return {
-        startAppend
-    }
-})();
+    return {createTodo, appendTodo, startAppend}
+}
 
-export {appendTodo, createTodo}
+export {todo}
