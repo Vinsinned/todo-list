@@ -1,3 +1,5 @@
+import { todoDiv } from "./index.js";
+import { todo } from "./todo.js";
 import "./style.css";
 
 let currentTab = '';
@@ -8,7 +10,7 @@ const tab = (name) => {
     let array = [];
     createTab.addEventListener('click', () => {
         currentTab = array;
-        console.log(currentTab)
+        switchTabs();
     });
     currentTab = array;
 }
@@ -38,10 +40,19 @@ const createTab = () => {
             div.removeChild(input);
             div.removeChild(submit);
             let newTab = tab(input.value);
+            switchTabs();
         } else {
             divReminder.textContent = 'The text field is empty!';
         }
     });
+}
+const switchTabs = () => {
+    todoDiv.innerHTML = '';
+    let i;
+    for (i = 0; i < currentTab.length; i++) {
+        let newUI = todo(currentTab);
+        newUI.appendTodo(i);
+    }
 }
 
 export {tab, createTab, currentTab};
