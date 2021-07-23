@@ -1,5 +1,6 @@
 import './style.css';
-import { todoDiv, content } from './index.js';
+//todoDiv
+import { content } from './index.js';
 
 const todo = (currentTab) => {
     const createTodo = () => {
@@ -106,7 +107,8 @@ const todo = (currentTab) => {
     }
     //Called by startAppend
     const appendTodo = (i) => {
-        //loop for each array in a list of arrays (for index attribute)
+        let todoDiv = document.createElement('div');
+        content.appendChild(todoDiv);
         todoDiv.className = 'todo';
         //creates elements to input array info
         let deleteIcon = document.createElement('p');
@@ -181,10 +183,10 @@ const todo = (currentTab) => {
         if (priority == 'yes') {
             console.log(title, description, dueDate, priority);
             currentTab.unshift([title, description, dueDate, priority]);
-            todoDiv.innerHTML = '';
+            content.innerHTML = '';
         } else {
             currentTab.push([title, description, dueDate, priority]);
-            todoDiv.innerHTML = '';
+            content.innerHTML = '';
         }
         let i;
         for (i = 0; i < currentTab.length; i++) {

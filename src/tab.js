@@ -1,7 +1,8 @@
-import { todoDiv } from "./index.js";
+import { content, todoDiv } from "./index.js";
 import { todo } from "./todo.js";
 import "./style.css";
 
+let current;
 let currentTab = '';
 const tab = (name) => {
     let createTab = document.createElement('p');
@@ -10,6 +11,7 @@ const tab = (name) => {
     let array = [];
     createTab.addEventListener('click', () => {
         currentTab = array;
+        current = createTab;
         switchTabs();
     });
     currentTab = array;
@@ -47,7 +49,7 @@ const createTab = () => {
     });
 }
 const switchTabs = () => {
-    todoDiv.innerHTML = '';
+    content.innerHTML = '';
     let i;
     for (i = 0; i < currentTab.length; i++) {
         let newUI = todo(currentTab);
