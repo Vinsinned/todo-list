@@ -29,10 +29,8 @@ const todo = (currentTab) => {
     let dateInput = document.createElement('input');
     //Priority
     let priorityQuestion = document.createElement('p');
-    let priorityLabel1 = document.createElement('label');
-    let priorityLabel2 = document.createElement('label');
-    let priorityInput1 = document.createElement('input');
-    let priorityInput2 = document.createElement('input');
+    let priorityLabel = document.createElement('label');
+    let priorityInput = document.createElement('input');
     let submit = document.createElement('button');
 
     //Title
@@ -49,17 +47,11 @@ const todo = (currentTab) => {
     form1.name = 'priority';
     form1.id = 'priority';
     priorityQuestion.textContent = 'Is this important?';
-    priorityInput1.name = 'radioButton';
-    priorityInput1.type = 'radio';
-    priorityInput1.value = 'yes';
-    priorityInput1.checked = true;
-    priorityInput2.name = 'radioButton';
-    priorityInput2.type = 'radio';
-    priorityInput2.value = 'no';
-    priorityLabel1.setAttribute('for', 'priority');
-    priorityLabel1.textContent = 'Yes';
-    priorityLabel2.setAttribute('for', 'priority');
-    priorityLabel2.textContent = 'No';
+    priorityInput.name = 'checkboxButton';
+    priorityInput.type = 'checkbox';
+    priorityInput.value = 'yes';
+    priorityLabel.setAttribute('for', 'priority');
+    priorityLabel.textContent = 'Yes';
 
     content.appendChild(div);
     //Title
@@ -74,10 +66,8 @@ const todo = (currentTab) => {
     //Priority
     div.appendChild(priorityQuestion)
     div.appendChild(form1);
-    form1.appendChild(priorityLabel1);
-    priorityLabel1.appendChild(priorityInput1);
-    form1.appendChild(priorityLabel2);
-    priorityLabel2.appendChild(priorityInput2);
+    form1.appendChild(priorityLabel);
+    priorityLabel.appendChild(priorityInput);
 
     div.appendChild(submit);
     div.appendChild(divReminder);
@@ -87,11 +77,8 @@ const todo = (currentTab) => {
             div.innerHTML = '';
             div.style.cssText = 'color: white';
             let form1Value;
-            let form2Value;
-            if (priorityInput1.checked) {
-                form1Value = priorityInput1.value;
-            } else if (priorityInput2.checked) {
-                form1Value = priorityInput2.value;
+            if (priorityInput.checked) {
+                form1Value = priorityInput.value;
             }
             startAppend(titleInput.value, descriptionInput.value, dateInput.value, form1Value);
         } else {
@@ -113,13 +100,16 @@ const todo = (currentTab) => {
         //creates elements to input array info
         let deleteIcon = document.createElement('p');
         let checklistIcon = document.createElement('p');
+        let editIcon = document.createElement('p');
         let icon = document.createElement('p');
         let todoTitle = document.createElement('h2');
         let todoDescription = document.createElement('p');
         let todoDate = document.createElement('p');
+        editIcon.className = 'material-icons';
         deleteIcon.className = 'material-icons';
         checklistIcon.className = 'material-icons';
         icon.className = 'material-icons';
+        editIcon.textContent = 'edit';
         deleteIcon.textContent = 'close';
         checklistIcon.textContent = 'check_box_outline_blank'
         deleteIcon.id = 'close';
@@ -141,6 +131,7 @@ const todo = (currentTab) => {
             todoTitle.className = 'red';
         }
         headerDiv.appendChild(todoDate);
+        headerDiv.appendChild(editIcon);
         headerDiv.appendChild(checklistIcon);
         headerDiv.appendChild(deleteIcon);
         headerDiv.style.cssText = 'display: flex; align-items: center';
@@ -157,6 +148,10 @@ const todo = (currentTab) => {
                 todoDiv.removeChild(descriptionDiv)
                 icon.textContent = 'add';
             }
+        });
+        editIcon.addEventListener('click', () => {
+            console.log('clicked');
+            editDiv(todoDiv);
         });
         //delete icon event listener
         deleteIcon.addEventListener('click', () => {
@@ -192,7 +187,111 @@ const todo = (currentTab) => {
             appendTodo(i);
         }
     }
-    return {createTodo, appendTodo, startAppend}
+    const modifyTodo = () => {
+        let today = new Date();
+        let div = document.createElement('div');
+        div.id = 'prompt';
+        div.style.cssText = `background-color: bisque;
+        width: 400px;
+        text-align: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        margin: auto;
+        position: relative;`;
+    
+        let divReminder = document.createElement('div');
+        divReminder.id = 'reminder';
+        let form1 = document.createElement('form');
+        //Title
+        let titleQuestion = document.createElement('p');
+        let titleInput = document.createElement('input');
+        //Description
+        let descriptionQuestion = document.createElement('p');
+        let descriptionInput = document.createElement('input');
+        //Date
+        let dateQuestion = document.createElement('p');
+        let dateInput = document.createElement('input');
+        //Priority
+        let priorityQuestion = document.createElement('p');
+        let priorityLabel1 = document.createElement('label');
+        let priorityLabel2 = document.createElement('label');
+        let priorityInput1 = document.createElement('input');
+        let priorityInput2 = document.createElement('input');
+        let submit = document.createElement('button');
+    
+        //Title
+        titleQuestion.textContent = 'Title:';
+        titleInput.type = 'text';
+        //Description
+        descriptionQuestion.textContent = 'Description:';
+        descriptionInput.type = 'text';
+        //Date
+        dateQuestion.textContent = 'Deadline:';
+        dateInput.type = 'date';
+        dateInput.value = `${today.getFullYear()}-0${today.getMonth() + 1}-${today.getDate()}`
+        //Priority 
+        form1.name = 'priority';
+        form1.id = 'priority';
+        priorityQuestion.textContent = 'Is this important?';
+        priorityInput1.name = 'radioButton';
+        priorityInput1.type = 'radio';
+        priorityInput1.value = 'yes';
+        priorityInput1.checked = true;
+        priorityInput2.name = 'radioButton';
+        priorityInput2.type = 'radio';
+        priorityInput2.value = 'no';
+        priorityLabel1.setAttribute('for', 'priority');
+        priorityLabel1.textContent = 'Yes';
+        priorityLabel2.setAttribute('for', 'priority');
+        priorityLabel2.textContent = 'No';
+    
+        content.appendChild(div);
+        //Title
+        div.appendChild(titleQuestion);
+        div.appendChild(titleInput);
+        //Description
+        div.appendChild(descriptionQuestion);
+        div.appendChild(descriptionInput);
+        //Date
+        div.appendChild(dateQuestion);
+        div.appendChild(dateInput);
+        //Priority
+        div.appendChild(priorityQuestion)
+        div.appendChild(form1);
+        form1.appendChild(priorityLabel1);
+        priorityLabel1.appendChild(priorityInput1);
+        form1.appendChild(priorityLabel2);
+        priorityLabel2.appendChild(priorityInput2);
+    
+        div.appendChild(submit);
+        div.appendChild(divReminder);
+        submit.textContent = 'Submit';
+        submit.addEventListener('click', () => {
+            if (titleInput.value != '' || descriptionInput.value != '') {
+                div.innerHTML = '';
+                div.style.cssText = 'color: white';
+                let form1Value;
+                if (priorityInput1.checked) {
+                    form1Value = priorityInput1.value;
+                } else if (priorityInput2.checked) {
+                    form1Value = priorityInput2.value;
+                }
+                startAppend(titleInput.value, descriptionInput.value, dateInput.value, form1Value);
+            } else {
+                divReminder.innerHTML = '';
+                divReminder.style.cssText = '';
+                let reminder = document.createElement('p');
+                reminder.className = 'reminder';
+                reminder.textContent = 'Please fill out the form!';
+                reminder.style.cssText = 'color: red';
+                divReminder.appendChild(reminder);
+            }
+        })
+        }
+    const editDiv = (div, title, description, dueDate, priority) => {
+        modifyTodo();
+    }
+    return {createTodo, appendTodo, startAppend, editDiv, modifyTodo}
 }
 
 export {todo}
