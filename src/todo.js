@@ -181,7 +181,6 @@ const todo = (currentTab) => {
     //Called by createTodo to append new list
     const startAppend = (title, description, dueDate, priority) => {
         if (priority == 'yes') {
-            console.log(title, description, dueDate, priority);
             currentTab.unshift([title, description, dueDate, priority]);
             content.innerHTML = '';
         } else {

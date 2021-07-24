@@ -6,15 +6,19 @@ let current;
 let currentTab = '';
 const tab = (name) => {
     let createTab = document.createElement('p');
+    createTab.id = 'tabs';
     createTab.textContent = name;
     document.body.appendChild(createTab);
     let array = [];
     createTab.addEventListener('click', () => {
         currentTab = array;
-        current = createTab;
         switchTabs();
+        current = createTab;
+        checkCurrent(createTab, current);
     });
     currentTab = array;
+    current = createTab;
+    checkCurrent(createTab, current);
 }
 const createTab = () => {
     let div = document.createElement('div');
@@ -54,6 +58,17 @@ const switchTabs = () => {
     for (i = 0; i < currentTab.length; i++) {
         let newUI = todo(currentTab);
         newUI.appendTodo(i);
+    }
+}
+const checkCurrent = (createTab, current) => {
+    let allTabs = document.querySelectorAll('#tabs');
+    let i;
+    for (i = 0; i < allTabs.length; i++) {
+        if (allTabs[i] == current) {
+            allTabs[i].style.cssText = 'color: red';
+        } else {
+            allTabs[i].style.cssText = 'color: black';
+        }
     }
 }
 
