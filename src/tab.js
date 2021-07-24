@@ -14,7 +14,7 @@ const tab = (name) => {
         currentTab = array;
         switchTabs();
         current = createTab;
-        checkCurrent(createTab, current);
+        checkCurrent(current);
     });
     currentTab = array;
     current = createTab;
@@ -60,7 +60,7 @@ const switchTabs = () => {
         newUI.appendTodo(i);
     }
 }
-const checkCurrent = (createTab, current) => {
+const checkCurrent = (current) => {
     let allTabs = document.querySelectorAll('#tabs');
     let i;
     for (i = 0; i < allTabs.length; i++) {
