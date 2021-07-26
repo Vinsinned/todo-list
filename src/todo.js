@@ -4,16 +4,25 @@ import { content, active, switchActive } from './index.js';
 
 const todo = (currentTab) => {
     const createTodo = () => {
+    content.style.cssText = 'filter: blur(1px)'
+    let media = window.matchMedia( "(max-width: 961px)" );
     let today = new Date();
     if (active == false) {
     let currentActive = switchActive();
     currentActive.makeTrue();
     let div = document.createElement('div');
     div.id = 'prompt';
-    div.style.cssText = `background-color: #343A40;
-    width: 400px; text-align: center; padding-top: 10px;
-    padding-bottom: 10px; position: absolute; margin-left: 230px;
-    top: 15%; border-top-right-radius: 30px; border-bottom-right-radius: 30px;`;
+    if (media.matches) {
+        div.style.cssText = `background-color: #343A40;
+        width: 400px; text-align: center; padding-top: 10px;
+        padding-bottom: 10px; position: absolute; margin-left: 230px;
+        top: 15%; border-top-right-radius: 30px; border-bottom-right-radius: 30px;`;
+    } else {
+        div.style.cssText = `background-color: #343A40;
+        width: 400px; text-align: center; padding-top: 10px;
+        padding-bottom: 10px; position: absolute; left: 50%;
+        top: 15%; border-radius: 30px;`;
+    }
 
     let divReminder = document.createElement('div');
     divReminder.className = 'divPara';
@@ -85,6 +94,7 @@ const todo = (currentTab) => {
     submit.textContent = 'Submit';
     submit.addEventListener('click', () => {
         if (titleInput.value != '' || descriptionInput.value != '') {
+            content.style.cssText = 'filter: blur(0)'
             div.innerHTML = '';
             div.style.cssText = 'color: white';
             let form1Value;
@@ -114,7 +124,9 @@ const todo = (currentTab) => {
         //creates elements to input array info
         let deleteIcon = document.createElement('p');
         let checklistIcon = document.createElement('p');
+        checklistIcon.style.cssText = 'cursor: pointer;';
         let editIcon = document.createElement('p');
+        editIcon.style.cssText = 'cursor: pointer;';
         let icon = document.createElement('p');
         let todoTitle = document.createElement('h2');
         let todoDescription = document.createElement('p');
@@ -154,36 +166,44 @@ const todo = (currentTab) => {
         todoDate.style.cssText = 'margin-left: auto;'
         //expand icon event listener
         icon.addEventListener('click', () => {
-            icon.classList.toggle('extend');
-            if (icon.classList.contains('extend')) {
-                icon.textContent = 'remove';
-                todoDiv.appendChild(descriptionDiv);
-                descriptionDiv.appendChild(todoDescription);
-                todoDescription.className = 'description';
-            } else {
-                todoDiv.removeChild(descriptionDiv)
-                icon.textContent = 'add';
+            if (active == false) {
+                icon.classList.toggle('extend');
+                if (icon.classList.contains('extend')) {
+                    icon.textContent = 'remove';
+                    todoDiv.appendChild(descriptionDiv);
+                    descriptionDiv.appendChild(todoDescription);
+                    todoDescription.className = 'description';
+                } else {
+                    todoDiv.removeChild(descriptionDiv)
+                    icon.textContent = 'add';
+                }
             }
         });
         editIcon.addEventListener('click', () => {
-            editDiv(deleteIcon);
+            if (active == false) {
+                editDiv(deleteIcon);
+            }
         });
         //delete icon event listener
         deleteIcon.addEventListener('click', () => {
-            todoDiv.removeChild(headerDiv);
-            if (todoDescription.classList.contains('description')) {
-                todoDiv.removeChild(descriptionDiv);
+            if (active == false) {
+                todoDiv.removeChild(headerDiv);
+                if (todoDescription.classList.contains('description')) {
+                    todoDiv.removeChild(descriptionDiv);
+                }
+                currentTab.splice(deleteIcon.getAttribute('data-index'), 1);
             }
-            currentTab.splice(deleteIcon.getAttribute('data-index'), 1);
         });
         checklistIcon.addEventListener('click', () => {
-            checklistIcon.classList.toggle('box');
-            if (checklistIcon.classList.contains('box')) {
-                checklistIcon.textContent = 'check_box';
-                todoTitle.style.cssText = 'text-decoration: line-through';
-            } else {
-                checklistIcon.textContent = 'check_box_outline_blank';
-                todoTitle.style.cssText = 'text-decoration: none;';
+            if (active == false) {
+                checklistIcon.classList.toggle('box');
+                if (checklistIcon.classList.contains('box')) {
+                    checklistIcon.textContent = 'check_box';
+                    todoTitle.style.cssText = 'text-decoration: line-through';
+                } else {
+                    checklistIcon.textContent = 'check_box_outline_blank';
+                    todoTitle.style.cssText = 'text-decoration: none;';
+                }
             }
         })
     return deleteIcon;
@@ -203,16 +223,25 @@ const todo = (currentTab) => {
         }
     }
     const modifyTodo = (index) => {
+        content.style.cssText = 'filter: blur(1px)'
+        let media = window.matchMedia( "(max-width: 961px)" );
         let today = new Date();
         if (active == false) {
         let currentActive = switchActive();
         currentActive.makeTrue();
         let div = document.createElement('div');
         div.id = 'prompt';
-        div.style.cssText = `background-color: #343A40;
-        width: 400px; text-align: center; padding-top: 10px;
-        padding-bottom: 10px; position: absolute; margin-left: 320px;
-        top: 10%; border-radius: 30px;`;
+        if (media.matches) {
+            div.style.cssText = `background-color: #343A40;
+            width: 400px; text-align: center; padding-top: 10px;
+            padding-bottom: 10px; position: absolute; margin-left: 320px;
+            top: 10%; border-radius: 30px;`;
+        } else {
+            div.style.cssText = `background-color: #343A40;
+            width: 400px; text-align: center; padding-top: 10px;
+            padding-bottom: 10px; position: absolute; left: 50%;
+            top: 10%; border-radius: 30px;`;
+        }
     
         let divReminder = document.createElement('div');
         divReminder.className = 'divPara';
@@ -282,8 +311,9 @@ const todo = (currentTab) => {
         div.appendChild(submit);
         div.appendChild(divReminder);
         submit.textContent = 'Submit';
-    submit.addEventListener('click', () => {
+        submit.addEventListener('click', () => {
         if (titleInput.value != '' || descriptionInput.value != '') {
+            content.style.cssText = 'filter: blur(0);'
             div.innerHTML = '';
             div.style.cssText = 'color: white';
             let form1Value;
@@ -292,7 +322,7 @@ const todo = (currentTab) => {
             }
             currentActive.makeFalse();
             let array = [titleInput.value, descriptionInput.value, dateInput.value, form1Value]
-            currentActive.splice(index, 1, array);
+            currentTab.splice(index, 1, array);
             modifyAppend();
         } else {
             divReminder.innerHTML = '';

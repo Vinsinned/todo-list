@@ -12,10 +12,12 @@ const tab = (name) => {
     sidebarSelect.appendChild(createTab);
     let array = [];
     createTab.addEventListener('click', () => {
-        currentTab = array;
-        switchTabs();
-        current = createTab;
-        checkCurrent(current);
+        if (active == false) {
+            currentTab = array;
+            switchTabs();
+            current = createTab;
+            checkCurrent(current);
+        }
     });
     currentTab = array;
     current = createTab;
@@ -23,21 +25,32 @@ const tab = (name) => {
 }
 const createTab = () => {
     if (active == false) {
+    content.style.cssText = 'filter: blur(1px)'
+    let media = window.matchMedia( "(max-width: 961px)" );
     let currentActive = switchActive();
     currentActive.makeTrue();
     let div = document.createElement('div');
-    div.style.cssText = `width: 250px; background-color: #343A40; text-align: center;
-    position: absolute;
-    left: 230px;
-    top: 25%;
-    border-top-right-radius: 30px; 
-    border-bottom-right-radius: 30px;`;
+    div.id = 'createTabDiv'
+    if (media.matches) {
+        div.style.cssText = `width: 250px; background-color: #343A40; text-align: center;
+        position: absolute;
+        left: 230px;
+        top: 25%;
+        border-top-right-radius: 30px; 
+        border-bottom-right-radius: 30px;`;
+    } else {
+        div.style.cssText = `width: 500px; background-color: #343A40; text-align: center;
+        position: absolute; height: 200px;
+        left: 50%;
+        top: 25%;
+        border-radius: 30px;`;
+    }
 
     let info = document.createElement('p');
     info.className = 'divPara';
     let input = document.createElement('input');
     input.className = 'divInput';
-    input.style.cssText = 'margin-bottom: 20px;'
+    input.style.cssText = 'margin-bottom: 30px;'
     let submit = document.createElement('button');
     submit.id = 'submit';
     info.textContent = 'Project Name';
@@ -55,6 +68,7 @@ const createTab = () => {
 
     submit.addEventListener('click', () => {
         if (input.value != '') {
+            content.style.cssText = 'filter: blur(0)'
             div.style.cssText = '';
             div.removeChild(info);
             div.removeChild(input);

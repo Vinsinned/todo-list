@@ -80,10 +80,45 @@ body {
     margin: 0%;
     background-color: #E0E0E0;
 }
-
 button {
     border: none;
 }
+button:hover {
+    transition: 0.1s;
+    transform: scale(1.01);
+    background-color: #CED4DA;
+}
+::-webkit-scrollbar {
+    width: 0px;
+}
+
 
 @media screen and (min-width: 961px) {
+    #content {
+        margin-left: 680px;
+        width: 780px;
+    }
+    #sidebar {
+        background-color: aqua;
+        width: 500px;
+        position: absolute;
+        height: 100%;
+        text-align: center;
+        overflow-y: scroll;
+        background-color: #B8B8B8;
+    }
+    .sidebar {
+        width: 400px;
+        height: 50px;
+        margin-bottom: 30px;
+        font-family: 'Roboto', sans-serif;
+        border-radius: 5px;
+        font-size: 20px;
+    }
+    ::-webkit-scrollbar {
+        width: 0px;
+    }
+    h1 {
+        font-size: 60px;
+    }
 }
