@@ -1,17 +1,45 @@
 import { todo } from "./todo.js";
 import { tab, createTab, currentTab } from "./tab.js"
 
+//prevents add project to activate when submit is already activated, and vice versa
+let active = false; 
+
+const switchActive = () => {
+    const makeTrue = () => {
+        active = true;
+    }
+    const makeFalse  = () => {
+        active = false;
+    }
+    return {makeTrue, makeFalse};
+}
+
+//DOM sidebar
+let sidebar = document.createElement('div');
+sidebar.id = 'sidebar';
+document.body.appendChild(sidebar);
+
+let title = document.createElement('h1');
+title.textContent = 'Todo List';
+sidebar.appendChild(title);
+
 let button = document.createElement('button');
 button.textContent = 'Submit';
-document.body.appendChild(button);
+button.className = 'sidebar';
+button.style.cssText = 'margin-top: 20px;'
+sidebar.appendChild(button);
 
 let addProject = document.createElement('button');
 addProject.textContent = 'Add Project';
-document.body.appendChild(addProject);
+addProject.className = 'sidebar';
+sidebar.appendChild(addProject);
 
-let todoDiv = document.createElement('div');
+let projectHeader = document.createElement('h2');
+projectHeader.textContent = 'Projects';
+sidebar.appendChild(projectHeader);
+
 let content = document.querySelector('#content');
-content.appendChild(todoDiv);
+let sidebarSelect = document.querySelector('#sidebar');
 
 let defaultTab = tab('default');
 
@@ -24,4 +52,4 @@ addProject.addEventListener('click', () => {
     createTab();
 })
 
-export {todoDiv, content}
+export {content, sidebarSelect, active, switchActive}

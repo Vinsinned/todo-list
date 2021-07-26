@@ -1,14 +1,15 @@
-import { content, todoDiv } from "./index.js";
-import { todo } from "./todo.js";
+import {content, sidebarSelect, active, switchActive} from "./index.js";
+import {todo} from "./todo.js";
 import "./style.css";
 
 let current;
 let currentTab = '';
 const tab = (name) => {
-    let createTab = document.createElement('p');
+    let createTab = document.createElement('button');
     createTab.id = 'tabs';
+    createTab.className = 'sidebar';
     createTab.textContent = name;
-    document.body.appendChild(createTab);
+    sidebarSelect.appendChild(createTab);
     let array = [];
     createTab.addEventListener('click', () => {
         currentTab = array;
@@ -21,8 +22,14 @@ const tab = (name) => {
     checkCurrent(createTab, current);
 }
 const createTab = () => {
+    if (active == false) {
+    let currentActive = switchActive();
+    currentActive.makeTrue();
     let div = document.createElement('div');
-    div.style.cssText = 'width: 250px; margin: auto; background-color: purple; text-align: center';
+    div.style.cssText = `width: 250px; background-color: purple; text-align: center;
+    position: absolute;
+    left: 230px;
+    top: 21%`;
 
     let info = document.createElement('p');
     let input = document.createElement('input');
@@ -45,12 +52,15 @@ const createTab = () => {
             div.removeChild(info);
             div.removeChild(input);
             div.removeChild(submit);
+            div.removeChild(divReminder);
             let newTab = tab(input.value);
+            currentActive.makeFalse();
             switchTabs();
         } else {
             divReminder.textContent = 'The text field is empty!';
         }
     });
+}
 }
 const switchTabs = () => {
     content.innerHTML = '';

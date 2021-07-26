@@ -1,19 +1,23 @@
 import './style.css';
 //todoDiv
-import { content } from './index.js';
+import { content, active, switchActive } from './index.js';
 
 const todo = (currentTab) => {
     const createTodo = () => {
     let today = new Date();
+    if (active == false) {
+    let currentActive = switchActive();
+    currentActive.makeTrue();
     let div = document.createElement('div');
     div.id = 'prompt';
     div.style.cssText = `background-color: bisque;
-    width: 400px;
+    width: 300px;
     text-align: center;
     padding-top: 10px;
     padding-bottom: 10px;
-    margin: auto;
-    position: relative;`;
+    position: absolute;
+    margin-left: 230px;
+    top: 0%;`;
 
     let divReminder = document.createElement('div');
     divReminder.id = 'reminder';
@@ -53,7 +57,7 @@ const todo = (currentTab) => {
     priorityLabel.setAttribute('for', 'priority');
     priorityLabel.textContent = 'Yes';
 
-    content.appendChild(div);
+    document.body.appendChild(div);
     //Title
     div.appendChild(titleQuestion);
     div.appendChild(titleInput);
@@ -80,6 +84,7 @@ const todo = (currentTab) => {
             if (priorityInput.checked) {
                 form1Value = priorityInput.value;
             }
+            currentActive.makeFalse();
             startAppend(titleInput.value, descriptionInput.value, dateInput.value, form1Value);
         } else {
             divReminder.innerHTML = '';
@@ -92,6 +97,7 @@ const todo = (currentTab) => {
         }
     })
     }
+}
     //Called by startAppend
     const appendTodo = (i) => {
         let todoDiv = document.createElement('div');
@@ -188,6 +194,9 @@ const todo = (currentTab) => {
     }
     const modifyTodo = (index) => {
     let today = new Date();
+    if (active == false) {
+    let currentActive = switchActive();
+    currentActive.makeTrue();
     let div = document.createElement('div');
     div.id = 'prompt';
     div.style.cssText = `background-color: bisque;
@@ -196,7 +205,9 @@ const todo = (currentTab) => {
     padding-top: 10px;
     padding-bottom: 10px;
     margin: auto;
-    position: relative;`;
+    position: absolute;
+    left: 40%;
+    margin-top: 70px;`;
 
     let divReminder = document.createElement('div');
     divReminder.id = 'reminder';
@@ -263,8 +274,9 @@ const todo = (currentTab) => {
             if (priorityInput.checked) {
                 form1Value = priorityInput.value;
             }
+            currentActive.makeFalse();
             let array = [titleInput.value, descriptionInput.value, dateInput.value, form1Value]
-            currentTab.splice(index, 1, array);
+            currentActive.splice(index, 1, array);
             modifyAppend();
         } else {
             divReminder.innerHTML = '';
@@ -276,7 +288,8 @@ const todo = (currentTab) => {
             divReminder.appendChild(reminder);
         }
     })
-        }
+    }
+    }
     const editDiv = (deleteIcon) => {
         let index = deleteIcon.getAttribute('data-index');
         modifyTodo(index);
