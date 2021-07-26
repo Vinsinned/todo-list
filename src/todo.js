@@ -10,8 +10,8 @@ const todo = (currentTab) => {
     currentActive.makeTrue();
     let div = document.createElement('div');
     div.id = 'prompt';
-    div.style.cssText = `background-color: bisque;
-    width: 300px;
+    div.style.cssText = `background-color: #343A40;
+    width: 400px;
     text-align: center;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -20,19 +20,24 @@ const todo = (currentTab) => {
     top: 0%;`;
 
     let divReminder = document.createElement('div');
+    divReminder.className = 'divPara';
     divReminder.id = 'reminder';
     let form1 = document.createElement('form');
     //Title
     let titleQuestion = document.createElement('p');
+    titleQuestion.className = 'divPara';
     let titleInput = document.createElement('input');
     //Description
     let descriptionQuestion = document.createElement('p');
+    descriptionQuestion.className = 'divPara';
     let descriptionInput = document.createElement('input');
     //Date
     let dateQuestion = document.createElement('p');
+    dateQuestion.className = 'divPara';
     let dateInput = document.createElement('input');
     //Priority
     let priorityQuestion = document.createElement('p');
+    priorityQuestion.className = 'divPara';
     let priorityLabel = document.createElement('label');
     let priorityInput = document.createElement('input');
     let submit = document.createElement('button');
@@ -101,6 +106,7 @@ const todo = (currentTab) => {
     //Called by startAppend
     const appendTodo = (i) => {
         let todoDiv = document.createElement('div');
+        todoDiv.id = 'todoDiv';
         content.appendChild(todoDiv);
         todoDiv.className = 'todo';
         //creates elements to input array info
@@ -129,6 +135,8 @@ const todo = (currentTab) => {
         //checks to see if list is note
         let headerDiv = document.createElement('div');
         let descriptionDiv = document.createElement('div');
+        descriptionDiv.id = 'descriptionDiv';
+        headerDiv.id = 'headerDiv';
         todoDiv.appendChild(headerDiv);
         headerDiv.appendChild(icon)
         headerDiv.appendChild(todoTitle);
