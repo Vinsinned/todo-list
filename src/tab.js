@@ -26,15 +26,21 @@ const createTab = () => {
     let currentActive = switchActive();
     currentActive.makeTrue();
     let div = document.createElement('div');
-    div.style.cssText = `width: 250px; background-color: purple; text-align: center;
+    div.style.cssText = `width: 250px; background-color: #343A40; text-align: center;
     position: absolute;
     left: 230px;
-    top: 21%`;
+    top: 25%;
+    border-top-right-radius: 30px; 
+    border-bottom-right-radius: 30px;`;
 
     let info = document.createElement('p');
+    info.className = 'divPara';
     let input = document.createElement('input');
+    input.className = 'divInput';
+    input.style.cssText = 'margin-bottom: 20px;'
     let submit = document.createElement('button');
-    info.textContent = 'Project Name:';
+    submit.id = 'submit';
+    info.textContent = 'Project Name';
     submit.textContent = 'submit';
 
     document.body.appendChild(div);
@@ -44,6 +50,7 @@ const createTab = () => {
     submit.style.cssText = 'display: block; margin: auto';
 
     let divReminder = document.createElement('p');
+    divReminder.className = 'divPara'
     div.appendChild(divReminder);
 
     submit.addEventListener('click', () => {
@@ -75,9 +82,9 @@ const checkCurrent = (current) => {
     let i;
     for (i = 0; i < allTabs.length; i++) {
         if (allTabs[i] == current) {
-            allTabs[i].style.cssText = 'color: red';
+            allTabs[i].style.cssText = 'background-color: #CED4DA; text-decoration: underline;';
         } else {
-            allTabs[i].style.cssText = 'color: black';
+            allTabs[i].style.cssText = 'background-color: none; text-decoration: none';
         }
     }
 }

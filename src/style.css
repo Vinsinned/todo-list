@@ -45,6 +45,26 @@ form {
     align-items: center;
     font-size: 20px;
 }
+#submit {
+    border: none;
+    width: 100px;
+    height: 30px;
+    border-radius: 20px;
+    font-size: 20px;
+}
+.divPara {
+    color: white;
+    font-size: 20px;
+    font-family: 'Comfortaa', sans-serif;
+}
+.divInput {
+    width: 200px;
+    height: 30px;
+    font-size: 20px;
+    border-radius: 30px;
+    padding-left: 15px;
+    font-family: 'Comfortaa', sans-serif;
+}
 .red {
     color: red
 }
@@ -54,6 +74,7 @@ form {
     margin-bottom: 30px;
     font-family: 'Roboto', sans-serif;
     border-radius: 5px;
+    font-size: 20px;
 }
 body {
     margin: 0%;

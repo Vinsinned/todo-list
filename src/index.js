@@ -21,6 +21,7 @@ document.body.appendChild(sidebar);
 
 let title = document.createElement('h1');
 title.textContent = 'Todo List';
+title.style.cssText = 'font-family: "Comfortaa", sans-serif;'
 sidebar.appendChild(title);
 
 let button = document.createElement('button');
@@ -36,6 +37,7 @@ sidebar.appendChild(addProject);
 
 let projectHeader = document.createElement('h2');
 projectHeader.textContent = 'Projects';
+projectHeader.style.cssText = 'font-family: "Comfortaa", sans-serif;'
 sidebar.appendChild(projectHeader);
 
 let content = document.querySelector('#content');
