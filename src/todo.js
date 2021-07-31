@@ -1,9 +1,9 @@
 import './style.css';
-//todoDiv
-import { content, active, switchActive } from './index.js';
+import {createStorage, saveTodo, checkLength, length} from './localStorage.js'
+import {content, active, switchActive} from './index.js';
+import {currentTab} from './tab.js';
 
-const todo = (currentTab) => {
-    const createTodo = () => {
+const createTodo = () => {
     content.style.cssText = 'filter: blur(1px)'
     let media = window.matchMedia( "(max-width: 961px)" );
     let today = new Date();
@@ -115,101 +115,195 @@ const todo = (currentTab) => {
     })
     }
 }
-    //Called by startAppend
-    const appendTodo = (i) => {
-        let todoDiv = document.createElement('div');
-        todoDiv.id = 'todoDiv';
-        content.appendChild(todoDiv);
-        todoDiv.className = 'todo';
-        //creates elements to input array info
-        let deleteIcon = document.createElement('p');
-        let checklistIcon = document.createElement('p');
-        checklistIcon.style.cssText = 'cursor: pointer;';
-        let editIcon = document.createElement('p');
-        editIcon.style.cssText = 'cursor: pointer;';
-        let icon = document.createElement('p');
-        let todoTitle = document.createElement('h2');
-        let todoDescription = document.createElement('p');
-        let todoDate = document.createElement('p');
-        editIcon.className = 'material-icons';
-        deleteIcon.className = 'material-icons';
-        checklistIcon.className = 'material-icons';
-        icon.className = 'material-icons';
-        editIcon.textContent = 'edit';
-        deleteIcon.textContent = 'close';
-        checklistIcon.textContent = 'check_box_outline_blank'
-        deleteIcon.id = 'close';
-        deleteIcon.setAttribute('data-index', currentTab.indexOf(currentTab[i]));
-        icon.textContent = 'add';
-        icon.id = 'add';
-        todoTitle.textContent = currentTab[i][0];
-        todoDescription.textContent = currentTab[i][1];
-        todoDescription.style.cssText = 'display: block'
-        todoDate.textContent = currentTab[i][2];
-        //checks to see if list is note
-        let headerDiv = document.createElement('div');
-        let descriptionDiv = document.createElement('div');
-        descriptionDiv.id = 'descriptionDiv';
-        headerDiv.id = 'headerDiv';
-        todoDiv.appendChild(headerDiv);
-        headerDiv.appendChild(icon)
-        headerDiv.appendChild(todoTitle);
-        //check priority
-        if (currentTab[i][3] == 'yes') {
-            todoTitle.className = 'red';
-        }
-        headerDiv.appendChild(todoDate);
-        headerDiv.appendChild(editIcon);
-        headerDiv.appendChild(checklistIcon);
-        headerDiv.appendChild(deleteIcon);
-        headerDiv.style.cssText = 'display: flex; align-items: center';
-        todoDate.style.cssText = 'margin-left: auto;'
-        //expand icon event listener
-        icon.addEventListener('click', () => {
-            if (active == false) {
-                icon.classList.toggle('extend');
-                if (icon.classList.contains('extend')) {
-                    icon.textContent = 'remove';
-                    todoDiv.appendChild(descriptionDiv);
-                    descriptionDiv.appendChild(todoDescription);
-                    todoDescription.className = 'description';
-                } else {
-                    todoDiv.removeChild(descriptionDiv)
-                    icon.textContent = 'add';
-                }
-            }
-        });
-        editIcon.addEventListener('click', () => {
-            if (active == false) {
-                editDiv(deleteIcon);
-            }
-        });
-        //delete icon event listener
-        deleteIcon.addEventListener('click', () => {
-            if (active == false) {
-                todoDiv.removeChild(headerDiv);
-                if (todoDescription.classList.contains('description')) {
-                    todoDiv.removeChild(descriptionDiv);
-                }
-                currentTab.splice(deleteIcon.getAttribute('data-index'), 1);
-            }
-        });
-        checklistIcon.addEventListener('click', () => {
-            if (active == false) {
-                checklistIcon.classList.toggle('box');
-                if (checklistIcon.classList.contains('box')) {
-                    checklistIcon.textContent = 'check_box';
-                    todoTitle.style.cssText = 'text-decoration: line-through';
-                } else {
-                    checklistIcon.textContent = 'check_box_outline_blank';
-                    todoTitle.style.cssText = 'text-decoration: none;';
-                }
-            }
-        })
-    return deleteIcon;
+//Called by startAppend
+const appendTodo = (i) => {
+    let todoDiv = document.createElement('div');
+    todoDiv.id = 'todoDiv';
+    content.appendChild(todoDiv);
+    todoDiv.className = 'todo';
+    //creates elements to input array info
+    let deleteIcon = document.createElement('p');
+    let checklistIcon = document.createElement('p');
+    checklistIcon.style.cssText = 'cursor: pointer;';
+    let editIcon = document.createElement('p');
+    editIcon.style.cssText = 'cursor: pointer;';
+    let icon = document.createElement('p');
+    let todoTitle = document.createElement('h2');
+    let todoDescription = document.createElement('p');
+    let todoDate = document.createElement('p');
+    editIcon.className = 'material-icons';
+    deleteIcon.className = 'material-icons';
+    checklistIcon.className = 'material-icons';
+    icon.className = 'material-icons';
+    editIcon.textContent = 'edit';
+    deleteIcon.textContent = 'close';
+    checklistIcon.textContent = 'check_box_outline_blank'
+    deleteIcon.id = 'close';
+    deleteIcon.setAttribute('data-index', currentTab.indexOf(currentTab[i]));
+    icon.textContent = 'add';
+    icon.id = 'add';
+    todoTitle.textContent = currentTab[i][0];
+    todoDescription.textContent = currentTab[i][1];
+    todoDescription.style.cssText = 'display: block'
+    todoDate.textContent = currentTab[i][2];
+    //checks to see if list is note
+    let headerDiv = document.createElement('div');
+    let descriptionDiv = document.createElement('div');
+    descriptionDiv.id = 'descriptionDiv';
+    headerDiv.id = 'headerDiv';
+    todoDiv.appendChild(headerDiv);
+    headerDiv.appendChild(icon)
+    headerDiv.appendChild(todoTitle);
+    //check priority
+    if (currentTab[i][3] == 'yes') {
+        todoTitle.className = 'red';
     }
-    //Called by createTodo to append new list
-    const startAppend = (title, description, dueDate, priority) => {
+    headerDiv.appendChild(todoDate);
+    headerDiv.appendChild(editIcon);
+    headerDiv.appendChild(checklistIcon);
+    headerDiv.appendChild(deleteIcon);
+    headerDiv.style.cssText = 'display: flex; align-items: center';
+    todoDate.style.cssText = 'margin-left: auto;'
+    //expand icon event listener
+    icon.addEventListener('click', () => {
+        if (active == false) {
+            icon.classList.toggle('extend');
+            if (icon.classList.contains('extend')) {
+                icon.textContent = 'remove';
+                todoDiv.appendChild(descriptionDiv);
+                descriptionDiv.appendChild(todoDescription);
+                todoDescription.className = 'description';
+            } else {
+                todoDiv.removeChild(descriptionDiv)
+                icon.textContent = 'add';
+            }
+        }
+    });
+    editIcon.addEventListener('click', () => {
+        if (active == false) {
+            editDiv(deleteIcon);
+        }
+    });
+    //delete icon event listener
+    deleteIcon.addEventListener('click', () => {
+        if (active == false) {
+            todoDiv.removeChild(headerDiv);
+            if (todoDescription.classList.contains('description')) {
+                todoDiv.removeChild(descriptionDiv);
+            }
+            currentTab.splice(deleteIcon.getAttribute('data-index'), 1);
+            localStorage.removeItem('list' + deleteIcon.getAttribute('data-index'));
+        }
+    });
+    checklistIcon.addEventListener('click', () => {
+        if (active == false) {
+            checklistIcon.classList.toggle('box');
+            if (checklistIcon.classList.contains('box')) {
+                checklistIcon.textContent = 'check_box';
+                todoTitle.style.cssText = 'text-decoration: line-through';
+            } else {
+                checklistIcon.textContent = 'check_box_outline_blank';
+                todoTitle.style.cssText = 'text-decoration: none;';
+            }
+        }
+    })
+    return deleteIcon;
+}
+const appendTodoStorage = (title, description, dueDate, priority, number) => {
+    let todoDiv = document.createElement('div');
+    todoDiv.id = 'todoDiv';
+    content.appendChild(todoDiv);
+    todoDiv.className = 'todo';
+    //creates elements to input array info
+    let deleteIcon = document.createElement('p');
+    let checklistIcon = document.createElement('p');
+    checklistIcon.style.cssText = 'cursor: pointer;';
+    let editIcon = document.createElement('p');
+    editIcon.style.cssText = 'cursor: pointer;';
+    let icon = document.createElement('p');
+    let todoTitle = document.createElement('h2');
+    let todoDescription = document.createElement('p');
+    let todoDate = document.createElement('p');
+    editIcon.className = 'material-icons';
+    deleteIcon.className = 'material-icons';
+    checklistIcon.className = 'material-icons';
+    icon.className = 'material-icons';
+    editIcon.textContent = 'edit';
+    deleteIcon.textContent = 'close';
+    checklistIcon.textContent = 'check_box_outline_blank'
+    deleteIcon.id = 'close';
+    deleteIcon.setAttribute('data-index', number);
+    icon.textContent = 'add';
+    icon.id = 'add';
+    todoTitle.textContent = title;
+    todoDescription.textContent = description;
+    todoDescription.style.cssText = 'display: block'
+    todoDate.textContent = dueDate;
+    //checks to see if list is note
+    let headerDiv = document.createElement('div');
+    let descriptionDiv = document.createElement('div');
+    descriptionDiv.id = 'descriptionDiv';
+    headerDiv.id = 'headerDiv';
+    todoDiv.appendChild(headerDiv);
+    headerDiv.appendChild(icon)
+    headerDiv.appendChild(todoTitle);
+    //check priority
+    if (priority == 'yes') {
+        todoTitle.className = 'red';
+    }
+    headerDiv.appendChild(todoDate);
+    headerDiv.appendChild(editIcon);
+    headerDiv.appendChild(checklistIcon);
+    headerDiv.appendChild(deleteIcon);
+    headerDiv.style.cssText = 'display: flex; align-items: center';
+    todoDate.style.cssText = 'margin-left: auto;'
+    //expand icon event listener
+    icon.addEventListener('click', () => {
+        if (active == false) {
+            icon.classList.toggle('extend');
+            if (icon.classList.contains('extend')) {
+                icon.textContent = 'remove';
+                todoDiv.appendChild(descriptionDiv);
+                descriptionDiv.appendChild(todoDescription);
+                todoDescription.className = 'description';
+            } else {
+                todoDiv.removeChild(descriptionDiv)
+                icon.textContent = 'add';
+            }
+        }
+    });
+    editIcon.addEventListener('click', () => {
+        if (active == false) {
+            editDiv(deleteIcon);
+        }
+    });
+    //delete icon event listener
+    deleteIcon.addEventListener('click', () => {
+        if (active == false) {
+            todoDiv.removeChild(headerDiv);
+            if (todoDescription.classList.contains('description')) {
+                todoDiv.removeChild(descriptionDiv);
+            }
+            currentTab.splice(deleteIcon.getAttribute('data-index'), 1);
+            localStorage.removeItem('list' + deleteIcon.getAttribute('data-index'));
+        }
+    });
+    checklistIcon.addEventListener('click', () => {
+        if (active == false) {
+            checklistIcon.classList.toggle('box');
+            if (checklistIcon.classList.contains('box')) {
+                checklistIcon.textContent = 'check_box';
+                todoTitle.style.cssText = 'text-decoration: line-through';
+            } else {
+                checklistIcon.textContent = 'check_box_outline_blank';
+                todoTitle.style.cssText = 'text-decoration: none;';
+            }
+        }
+    })
+    return deleteIcon;
+}
+//Called by createTodo to append new list
+const startAppend = (title, description, dueDate, priority) => {
         if (priority == 'yes') {
             currentTab.unshift([title, description, dueDate, priority]);
             content.innerHTML = '';
@@ -217,12 +311,25 @@ const todo = (currentTab) => {
             currentTab.push([title, description, dueDate, priority]);
             content.innerHTML = '';
         }
+        let newList = createStorage(title, description, dueDate, priority);
+        checkLength();
+        localStorage.setItem('list' + length, newList);
+        saveTodo(newList);
         let i;
         for (i = 0; i < currentTab.length; i++) {
             appendTodo(i);
         }
+}
+const addArrayList = (title, description, dueDate, priority) => {
+    if (priority == 'yes') {
+        currentTab.unshift([title, description, dueDate, priority]);
+        content.innerHTML = '';
+    } else {
+        currentTab.push([title, description, dueDate, priority]);
+        content.innerHTML = '';
     }
-    const modifyTodo = (index) => {
+}
+const modifyTodo = (index) => {
         content.style.cssText = 'filter: blur(1px)'
         let media = window.matchMedia( "(max-width: 961px)" );
         let today = new Date();
@@ -335,19 +442,18 @@ const todo = (currentTab) => {
         }
     })
     }
-    }
-    const editDiv = (deleteIcon) => {
+}
+const editDiv = (deleteIcon) => {
         let index = deleteIcon.getAttribute('data-index');
         modifyTodo(index);
-    }
-    const modifyAppend = () => {
+}
+const modifyAppend = () => {
         content.innerHTML = '';
         let i;
         for (i = 0; i < currentTab.length; i++) {
             appendTodo(i);
         }
-    }
-    return {createTodo, appendTodo, startAppend, editDiv, modifyTodo, modifyAppend}
 }
 
-export {todo}
+export {createTodo, appendTodo, startAppend, appendTodoStorage,  
+    editDiv, modifyTodo, modifyAppend, addArrayList}

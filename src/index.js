@@ -1,5 +1,9 @@
-import { todo } from "./todo.js";
-import { tab, createTab, currentTab } from "./tab.js"
+import {todo} from './todo.js';
+import {tab, createTab, currentTab, defaultTab, loadStorage, length, checkLength} from './tab.js';
+import {createTodo, appendTodo, startAppend, editDiv, modifyTodo, modifyAppend} from './todo.js';
+import {loadTodo} from './localStorage.js';
+
+window.localStorage;
 
 //prevents add project to activate when submit is already activated, and vice versa
 let active = false; 
@@ -40,18 +44,29 @@ projectHeader.textContent = 'Projects';
 projectHeader.style.cssText = 'font-family: "Comfortaa", sans-serif;'
 sidebar.appendChild(projectHeader);
 
+let projectContainer = document.createElement('div');
+sidebar.appendChild(projectContainer);
+projectContainer.id = 'projectContainer';
+
 let content = document.querySelector('#content');
 let sidebarSelect = document.querySelector('#sidebar');
+let projectSelect = document.querySelector('#projectContainer');
 
-let defaultTab = tab('default');
+let createDefaultTab = defaultTab('default');
 
 button.addEventListener('click', ()=> {
-    let newUI = todo(currentTab);
-    newUI.createTodo();
+    createTodo();
 });
 
 addProject.addEventListener('click', () => {
     createTab();
 })
 
-export {content, sidebarSelect, active, switchActive}
+/*
+//do this tmrw
+checkLength();
+loadStorage(length);
+*/
+loadTodo();
+
+export {content, sidebarSelect, projectSelect, active, switchActive}

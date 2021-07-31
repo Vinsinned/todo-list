@@ -88,10 +88,6 @@ button:hover {
     transform: scale(1.01);
     background-color: #CED4DA;
 }
-::-webkit-scrollbar {
-    width: 0px;
-}
-
 
 @media screen and (min-width: 961px) {
     #content {
@@ -116,7 +112,7 @@ button:hover {
         font-size: 20px;
     }
     ::-webkit-scrollbar {
-        width: 0px;
+        
     }
     h1 {
         font-size: 60px;

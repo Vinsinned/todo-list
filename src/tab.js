@@ -1,16 +1,37 @@
-import {content, sidebarSelect, active, switchActive} from "./index.js";
-import {todo} from "./todo.js";
+import {content, sidebarSelect, projectSelect, active, switchActive} from "./index.js";
+import {startAppendStorage, createTodo, appendTodo, startAppend, editDiv, modifyTodo, modifyAppend} from "./todo.js";
 import "./style.css";
 
 let current;
 let currentTab = '';
+let length = 1;
 const tab = (name) => {
     let createTab = document.createElement('button');
     createTab.id = 'tabs';
     createTab.className = 'sidebar';
     createTab.textContent = name;
-    sidebarSelect.appendChild(createTab);
+    projectSelect.appendChild(createTab);
     let array = [];
+    createTab.addEventListener('click', () => {
+        if (active == false) {
+            currentTab = array;
+            switchTabs();
+            current = createTab;
+            checkCurrent(current);
+        }
+    });
+    currentTab = array;
+    current = createTab;
+    checkCurrent(createTab, current);
+}
+const defaultTab = () => {
+    let createTab = document.createElement('button');
+    createTab.id = 'tabs';
+    createTab.className = 'sidebar';
+    createTab.textContent = 'default';
+    projectSelect.appendChild(createTab);
+    let array = [];
+    //localStorage.setItem('tab0', createTab.textContent);
     createTab.addEventListener('click', () => {
         if (active == false) {
             currentTab = array;
@@ -74,9 +95,16 @@ const createTab = () => {
             div.removeChild(input);
             div.removeChild(submit);
             div.removeChild(divReminder);
-            let newTab = tab(input.value);
             currentActive.makeFalse();
+            tab(input.value);
             switchTabs();
+            //work on this tmr
+            /*
+            localStorage.setItem('tab' + length, input.value);
+            length += 1;
+            tab(input.value);
+            loadStorage(length);
+            */
         } else {
             divReminder.textContent = 'The text field is empty!';
         }
@@ -87,8 +115,7 @@ const switchTabs = () => {
     content.innerHTML = '';
     let i;
     for (i = 0; i < currentTab.length; i++) {
-        let newUI = todo(currentTab);
-        newUI.appendTodo(i);
+        appendTodo(i);
     }
 }
 const checkCurrent = (current) => {
@@ -102,5 +129,30 @@ const checkCurrent = (current) => {
         }
     }
 }
+const arrayPushStorage = (title, description, dueDate, priority) => {
+    if (priority == 'yes') {
+        currentTab.unshift([title, description, dueDate, priority]);
+    } else {
+        currentTab.push([title, description, dueDate, priority]);
+    }
+}
+/*
+const loadStorage = (length) => {
+    let i;
+    console.log(length);
+    projectSelect.innerHTML = '';
+    for (i = 0; i < length; i++) {
+        let tabName = localStorage.getItem('tab' + i);
+        let newTab = tab(tabName);
+    }
+}
+const checkLength = () => {
+    let i;
+    for (i = 1; i < localStorage.length; i++) {
+        length += 1;
+    }
+}
+*/
 
-export {tab, createTab, currentTab};
+//loadStorage, checkLength
+export {arrayPushStorage, tab, createTab, currentTab, defaultTab, length};
