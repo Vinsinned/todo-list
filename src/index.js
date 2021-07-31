@@ -1,6 +1,6 @@
 import {todo} from './todo.js';
-import {tab, createTab, currentTab, defaultTab, loadStorage, length, checkLength} from './tab.js';
-import {createTodo, appendTodo, startAppend, editDiv, modifyTodo, modifyAppend} from './todo.js';
+import {createTab, defaultTab} from './tab.js';
+import {createTodo} from './todo.js';
 import {loadTodo} from './localStorage.js';
 
 window.localStorage;

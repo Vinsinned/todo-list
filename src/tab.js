@@ -1,10 +1,11 @@
-import {content, sidebarSelect, projectSelect, active, switchActive} from "./index.js";
-import {startAppendStorage, createTodo, appendTodo, startAppend, editDiv, modifyTodo, modifyAppend} from "./todo.js";
+import {content, projectSelect, active, switchActive} from "./index.js";
+import {appendTodo} from "./todo.js";
+import {} from "./localStorage.js";
 import "./style.css";
 
 let current;
 let currentTab = '';
-let length = 1;
+let tabLength = 0;
 const tab = (name) => {
     let createTab = document.createElement('button');
     createTab.id = 'tabs';
@@ -31,7 +32,7 @@ const defaultTab = () => {
     createTab.textContent = 'default';
     projectSelect.appendChild(createTab);
     let array = [];
-    //localStorage.setItem('tab0', createTab.textContent);
+    localStorage.setItem('tab', createTab.textContent);
     createTab.addEventListener('click', () => {
         if (active == false) {
             currentTab = array;
@@ -89,6 +90,7 @@ const createTab = () => {
 
     submit.addEventListener('click', () => {
         if (input.value != '') {
+            //checkTabLength();
             content.style.cssText = 'filter: blur(0)'
             div.style.cssText = '';
             div.removeChild(info);
@@ -96,20 +98,28 @@ const createTab = () => {
             div.removeChild(submit);
             div.removeChild(divReminder);
             currentActive.makeFalse();
-            tab(input.value);
             switchTabs();
-            //work on this tmr
-            /*
-            localStorage.setItem('tab' + length, input.value);
-            length += 1;
+            checkTabLength();
+            localStorage.setItem('tab' + tabLength, input.value);
+            tabLength += 1;
             tab(input.value);
-            loadStorage(length);
-            */
         } else {
             divReminder.textContent = 'The text field is empty!';
         }
     });
 }
+}
+const checkTabLength = () => {
+    tabLength = 0;
+    let i;
+    for (i = 0; i < localStorage.length; i ++) {
+        if (localStorage.getItem('tab' + i)) {
+            tabLength += 1;
+        }
+    }
+}
+let appendTodoTab = (name) => {
+    tab(name);
 }
 const switchTabs = () => {
     content.innerHTML = '';
@@ -129,30 +139,6 @@ const checkCurrent = (current) => {
         }
     }
 }
-const arrayPushStorage = (title, description, dueDate, priority) => {
-    if (priority == 'yes') {
-        currentTab.unshift([title, description, dueDate, priority]);
-    } else {
-        currentTab.push([title, description, dueDate, priority]);
-    }
-}
-/*
-const loadStorage = (length) => {
-    let i;
-    console.log(length);
-    projectSelect.innerHTML = '';
-    for (i = 0; i < length; i++) {
-        let tabName = localStorage.getItem('tab' + i);
-        let newTab = tab(tabName);
-    }
-}
-const checkLength = () => {
-    let i;
-    for (i = 1; i < localStorage.length; i++) {
-        length += 1;
-    }
-}
-*/
 
-//loadStorage, checkLength
-export {arrayPushStorage, tab, createTab, currentTab, defaultTab, length};
+export {tab, createTab, currentTab, tabLength,
+    defaultTab, appendTodoTab, checkTabLength};
