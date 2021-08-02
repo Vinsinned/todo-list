@@ -1,7 +1,7 @@
 import './style.css';
 import {createStorage, saveTodo, checkLength, length} from './localStorage.js'
 import {content, active, switchActive} from './index.js';
-import {currentTab} from './tab.js';
+import {currentTab, currentTabList} from './tab.js';
 
 const createTodo = () => {
     content.style.cssText = 'filter: blur(1px)'
@@ -93,7 +93,7 @@ const createTodo = () => {
     div.appendChild(divReminder);
     submit.textContent = 'Submit';
     submit.addEventListener('click', () => {
-        if (titleInput.value != '' || descriptionInput.value != '') {
+        if (titleInput.value != '' || descriptionInput.value != '' || currentTab.includes(titleInput.value, descriptionInput.value, dateInput.value, form1Value)) {
             content.style.cssText = 'filter: blur(0)'
             div.innerHTML = '';
             div.style.cssText = 'color: white';
@@ -209,7 +209,7 @@ const appendTodo = (i) => {
     })
     return deleteIcon;
 }
-const appendTodoStorage = (title, description, dueDate, priority, number) => {
+const appendTodoStorage = (title, description, dueDate, priority, number, tab) => {
     let todoDiv = document.createElement('div');
     todoDiv.id = 'todoDiv';
     content.appendChild(todoDiv);
@@ -311,7 +311,7 @@ const startAppend = (title, description, dueDate, priority) => {
             currentTab.push([title, description, dueDate, priority]);
             content.innerHTML = '';
         }
-        let newList = createStorage(title, description, dueDate, priority);
+        let newList = createStorage(title, description, dueDate, priority, currentTabList);
         checkLength();
         localStorage.setItem('list' + length, newList);
         saveTodo(newList);
@@ -320,12 +320,12 @@ const startAppend = (title, description, dueDate, priority) => {
             appendTodo(i);
         }
 }
-const addArrayList = (title, description, dueDate, priority) => {
+const addArrayList = (title, description, dueDate, priority, number, tab) => {
     if (priority == 'yes') {
-        currentTab.unshift([title, description, dueDate, priority]);
+        currentTab.unshift([title, description, dueDate, priority, number, tab]);
         content.innerHTML = '';
     } else {
-        currentTab.push([title, description, dueDate, priority]);
+        currentTab.push([title, description, dueDate, priority, number, tab]);
         content.innerHTML = '';
     }
 }

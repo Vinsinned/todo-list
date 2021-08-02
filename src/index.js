@@ -1,5 +1,5 @@
 import {todo} from './todo.js';
-import {createTab, defaultTab} from './tab.js';
+import {createTab, currentTabList, defaultTab} from './tab.js';
 import {createTodo} from './todo.js';
 import {loadTodo} from './localStorage.js';
 
@@ -7,16 +7,6 @@ window.localStorage;
 
 //prevents add project to activate when submit is already activated, and vice versa
 let active = false; 
-
-const switchActive = () => {
-    const makeTrue = () => {
-        active = true;
-    }
-    const makeFalse  = () => {
-        active = false;
-    }
-    return {makeTrue, makeFalse};
-}
 
 //DOM sidebar
 let sidebar = document.createElement('div');
@@ -62,6 +52,19 @@ addProject.addEventListener('click', () => {
     createTab();
 })
 
+const switchActive = () => {
+    const makeTrue = () => {
+        active = true;
+    }
+    const makeFalse  = () => {
+        active = false;
+    }
+    return {makeTrue, makeFalse};
+}
+const clearProjects = () => {
+    projectSelect.innerHTML = '';
+}
+
 /*
 //do this tmrw
 checkLength();
@@ -69,4 +72,4 @@ loadStorage(length);
 */
 loadTodo();
 
-export {content, sidebarSelect, projectSelect, active, switchActive}
+export {content, sidebarSelect, projectSelect, active, switchActive, clearProjects}

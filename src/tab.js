@@ -1,10 +1,12 @@
 import {content, projectSelect, active, switchActive} from "./index.js";
-import {appendTodo} from "./todo.js";
-import {} from "./localStorage.js";
+import {appendTodo, appendTodoStorage} from "./todo.js";
+import {loadTodoList} from "./localStorage.js";
 import "./style.css";
 
 let current;
-let currentTab = '';
+let currentTab = [];
+currentTab.id = 'currentTab';
+let currentTabList;
 let tabLength = 0;
 const tab = (name) => {
     let createTab = document.createElement('button');
@@ -16,13 +18,14 @@ const tab = (name) => {
     createTab.addEventListener('click', () => {
         if (active == false) {
             currentTab = array;
-            switchTabs();
             current = createTab;
             checkCurrent(current);
+            currentTabList = name;
+            switchTabs();
         }
     });
+    currentTabList = name;
     currentTab = array;
-    current = createTab;
     checkCurrent(createTab, current);
 }
 const defaultTab = () => {
@@ -32,18 +35,20 @@ const defaultTab = () => {
     createTab.textContent = 'default';
     projectSelect.appendChild(createTab);
     let array = [];
-    localStorage.setItem('tab', createTab.textContent);
+    localStorage.setItem('tab0', createTab.textContent);
     createTab.addEventListener('click', () => {
         if (active == false) {
             currentTab = array;
-            switchTabs();
             current = createTab;
             checkCurrent(current);
+            currentTabList = 'default';
+            switchTabs();
         }
     });
     currentTab = array;
     current = createTab;
     checkCurrent(createTab, current);
+    currentTabList = 'default';
 }
 const createTab = () => {
     if (active == false) {
@@ -89,7 +94,14 @@ const createTab = () => {
     div.appendChild(divReminder);
 
     submit.addEventListener('click', () => {
-        if (input.value != '') {
+        let duplicate = [];
+        let i;
+        for (i = 0; i < localStorage.length; i++) {
+            if (localStorage.getItem('tab' + i)) {
+                duplicate.push(localStorage.getItem('tab' + i));
+            }
+        }
+        if (input.value != '' && duplicate.includes(input.value) == false) {
             //checkTabLength();
             content.style.cssText = 'filter: blur(0)'
             div.style.cssText = '';
@@ -100,11 +112,15 @@ const createTab = () => {
             currentActive.makeFalse();
             switchTabs();
             checkTabLength();
+            //prevent making duplicate tabs
             localStorage.setItem('tab' + tabLength, input.value);
             tabLength += 1;
             tab(input.value);
-        } else {
+            loadTodoList();
+        } else if (input.value == '') {
             divReminder.textContent = 'The text field is empty!';
+        } else if (duplicate.includes(input.value)) {
+            divReminder.textContent = 'There is already a tab with the same name!'
         }
     });
 }
@@ -122,11 +138,14 @@ let appendTodoTab = (name) => {
     tab(name);
 }
 const switchTabs = () => {
+    clearCurrentTab();
     content.innerHTML = '';
-    let i;
+    /*
     for (i = 0; i < currentTab.length; i++) {
         appendTodo(i);
     }
+    */
+   loadTodoList();
 }
 const checkCurrent = (current) => {
     let allTabs = document.querySelectorAll('#tabs');
@@ -139,6 +158,15 @@ const checkCurrent = (current) => {
         }
     }
 }
+const clearCurrentTab = () => {
+    currentTab = [];
+}
+const loopArrayList = () => {
+    let i;
+    for (i = 0; i < currentTab.length; i++) {
+        appendTodoStorage(currentTab[i][0], currentTab[i][1], currentTab[i][2], currentTab[i][3], currentTab[i][4], currentTab[i][5]);
+    }
+}
 
-export {tab, createTab, currentTab, tabLength,
-    defaultTab, appendTodoTab, checkTabLength};
+export {tab, createTab, currentTab, clearCurrentTab, tabLength, currentTabList,
+    defaultTab, appendTodoTab, checkTabLength, loopArrayList};
