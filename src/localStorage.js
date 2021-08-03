@@ -33,14 +33,10 @@ const loadTodo = () => {
         }
     }
     let i;
+    //READ THIS: when list 0 is deleted, make list1 list0 and so on
     for (i = 0; i < length; i++) {
-        console.log(length);
         let list = JSON.parse(localStorage.getItem('list' + i));
         if (list.tab == currentTabList) {
-            /*
-            console.log('I think so...');
-            appendTodoStorage(objectList.title, objectList.description, objectList.dueDate, objectList.priority, i, currentTabList);
-            */
             let objectList = JSON.parse(localStorage.getItem('list' + i));
             addArrayList(objectList.title, objectList.description, objectList.dueDate, objectList.priority, i, currentTabList);
         }
@@ -52,10 +48,13 @@ const loadTodoList = () => {
     let i;
     for (i = 0; i < length; i++) {
         let list = JSON.parse(localStorage.getItem('list' + i));
-        if (list.tab == currentTabList) {
-            let objectList = JSON.parse(localStorage.getItem('list' + i));
-            addArrayList(objectList.title, objectList.description, objectList.dueDate, objectList.priority, i, currentTabList);
-        }
+        console.log(list);
+        //if (list) {
+            if (list.tab == currentTabList) {
+                let objectList = JSON.parse(localStorage.getItem('list' + i));
+                addArrayList(objectList.title, objectList.description, objectList.dueDate, objectList.priority, i, currentTabList);
+            }
+        //}
     }
     loopArrayList();
 }

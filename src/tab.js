@@ -73,25 +73,41 @@ const createTab = () => {
         border-radius: 30px;`;
     }
 
+    let buttonsDiv = document.createElement('div');
+    buttonsDiv.id = 'buttonsDiv';
     let info = document.createElement('p');
     info.className = 'divPara';
     let input = document.createElement('input');
     input.className = 'divInput';
     input.style.cssText = 'margin-bottom: 30px;'
     let submit = document.createElement('button');
-    submit.id = 'submit';
+    submit.className = 'tabButtons';
     info.textContent = 'Project Name';
-    submit.textContent = 'submit';
+    submit.textContent = 'Submit';
+    let cancel = document.createElement('button');
+    cancel.textContent = 'Cancel'
+    cancel.className = 'tabButtons';
 
     document.body.appendChild(div);
     div.appendChild(info);
     div.appendChild(input);
-    div.appendChild(submit);
-    submit.style.cssText = 'display: block; margin: auto';
+    div.appendChild(buttonsDiv);
+    buttonsDiv.appendChild(submit);
+    buttonsDiv.appendChild(cancel);
 
     let divReminder = document.createElement('p');
     divReminder.className = 'divPara'
     div.appendChild(divReminder);
+
+    cancel.addEventListener('click', () => {
+        content.style.cssText = 'filter: blur(0)'
+        div.style.cssText = '';
+        div.removeChild(info);
+        div.removeChild(input);
+        div.removeChild(buttonsDiv)
+        div.removeChild(divReminder);
+        currentActive.makeFalse();
+    })
 
     submit.addEventListener('click', () => {
         let duplicate = [];
@@ -117,10 +133,11 @@ const createTab = () => {
             tabLength += 1;
             tab(input.value);
             loadTodoList();
+            content.innerHTML = '';
         } else if (input.value == '') {
             divReminder.textContent = 'The text field is empty!';
         } else if (duplicate.includes(input.value)) {
-            divReminder.textContent = 'There is already a tab with the same name!'
+            divReminder.textContent = 'There is already a tab with the same name!';
         }
     });
 }

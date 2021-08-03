@@ -24,6 +24,8 @@ const createTodo = () => {
         top: 15%; border-radius: 30px;`;
     }
 
+    let buttonsDiv = document.createElement('div');
+    buttonsDiv.id = 'buttonsDiv';
     let divReminder = document.createElement('div');
     divReminder.className = 'divPara';
     divReminder.id = 'reminder';
@@ -50,8 +52,10 @@ const createTodo = () => {
     priorityLabel.className = 'divPara';
     let priorityInput = document.createElement('input');
     let submit = document.createElement('button');
-    submit.id = 'submit';
-    submit.style.cssText = 'margin-top: 20px;'
+    submit.className = 'tabButtons';
+    let cancel = document.createElement('button');
+    cancel.textContent = 'Cancel'
+    cancel.className = 'tabButtons';
 
     //Title
     titleQuestion.textContent = 'Title';
@@ -74,6 +78,8 @@ const createTodo = () => {
     priorityLabel.textContent = 'Yes';
 
     document.body.appendChild(div);
+    //cancelIcon
+    div.appendChild(cancel);
     //Title
     div.appendChild(titleQuestion);
     div.appendChild(titleInput);
@@ -88,9 +94,18 @@ const createTodo = () => {
     div.appendChild(form1);
     form1.appendChild(priorityLabel);
     priorityLabel.appendChild(priorityInput);
-
-    div.appendChild(submit);
+    div.appendChild(buttonsDiv);
+    buttonsDiv.appendChild(submit);
+    buttonsDiv.appendChild(cancel);
     div.appendChild(divReminder);
+
+    cancel.addEventListener('click', () => {
+        content.style.cssText = 'filter: blur(0)'
+        div.innerHTML = '';
+        div.style.cssText = 'color: white';
+        currentActive.makeFalse();
+    })
+
     submit.textContent = 'Submit';
     submit.addEventListener('click', () => {
         if (titleInput.value != '' || descriptionInput.value != '' || currentTab.includes(titleInput.value, descriptionInput.value, dateInput.value, form1Value)) {
@@ -349,7 +364,9 @@ const modifyTodo = (index) => {
             padding-bottom: 10px; position: absolute; left: 50%;
             top: 10%; border-radius: 30px;`;
         }
-    
+        
+        let buttonsDiv = document.createElement('div');
+        buttonsDiv.id = 'buttonsDiv';
         let divReminder = document.createElement('div');
         divReminder.className = 'divPara';
         divReminder.id = 'reminder';
@@ -376,8 +393,10 @@ const modifyTodo = (index) => {
         priorityLabel.className = 'divPara';
         let priorityInput = document.createElement('input');
         let submit = document.createElement('button');
-        submit.id = 'submit';
-        submit.style.cssText = 'margin-top: 20px;'
+        submit.className = 'tabButtons';
+        let cancel = document.createElement('button');
+        cancel.textContent = 'Cancel'
+        cancel.className = 'tabButtons';
     
         //Title
         titleQuestion.textContent = 'Title';
@@ -414,10 +433,19 @@ const modifyTodo = (index) => {
         div.appendChild(form1);
         form1.appendChild(priorityLabel);
         priorityLabel.appendChild(priorityInput);
-    
-        div.appendChild(submit);
+        div.appendChild(buttonsDiv);
+        buttonsDiv.appendChild(submit);
+        buttonsDiv.appendChild(cancel);
         div.appendChild(divReminder);
         submit.textContent = 'Submit';
+
+        cancel.addEventListener('click', () => {
+            content.style.cssText = 'filter: blur(0)'
+            div.innerHTML = '';
+            div.style.cssText = 'color: white';
+            currentActive.makeFalse();
+        });
+
         submit.addEventListener('click', () => {
         if (titleInput.value != '' || descriptionInput.value != '') {
             content.style.cssText = 'filter: blur(0);'
