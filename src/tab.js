@@ -20,11 +20,13 @@ const tab = (name) => {
             currentTab = array;
             current = createTab;
             checkCurrent(current);
-            currentTabList = name;
+            currentTabList = createTab.textContent;
+            console.log(currentTabList);
             switchTabs();
         }
     });
     currentTabList = name;
+    console.log(currentTabList);
     currentTab = array;
     checkCurrent(createTab, current);
 }
@@ -123,7 +125,7 @@ const createTab = () => {
             div.style.cssText = '';
             div.removeChild(info);
             div.removeChild(input);
-            div.removeChild(submit);
+            div.removeChild(buttonsDiv);
             div.removeChild(divReminder);
             currentActive.makeFalse();
             switchTabs();
@@ -183,6 +185,9 @@ const loopArrayList = () => {
     for (i = 0; i < currentTab.length; i++) {
         appendTodoStorage(currentTab[i][0], currentTab[i][1], currentTab[i][2], currentTab[i][3], currentTab[i][4], currentTab[i][5]);
     }
+}
+const moveList = () => {
+    
 }
 
 export {tab, createTab, currentTab, clearCurrentTab, tabLength, currentTabList,

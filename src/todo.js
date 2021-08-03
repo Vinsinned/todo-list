@@ -208,6 +208,7 @@ const appendTodo = (i) => {
             }
             currentTab.splice(deleteIcon.getAttribute('data-index'), 1);
             localStorage.removeItem('list' + deleteIcon.getAttribute('data-index'));
+            //moveList();
         }
     });
     checklistIcon.addEventListener('click', () => {
