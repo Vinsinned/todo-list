@@ -21,12 +21,10 @@ const tab = (name) => {
             current = createTab;
             checkCurrent(current);
             currentTabList = createTab.textContent;
-            console.log(currentTabList);
             switchTabs();
         }
     });
     currentTabList = name;
-    console.log(currentTabList);
     currentTab = array;
     checkCurrent(createTab, current);
 }

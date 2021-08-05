@@ -48,7 +48,6 @@ const loadTodoList = () => {
     let i;
     for (i = 0; i < length; i++) {
         let list = JSON.parse(localStorage.getItem('list' + i));
-        console.log(list);
         //if (list) {
             if (list.tab == currentTabList) {
                 let objectList = JSON.parse(localStorage.getItem('list' + i));

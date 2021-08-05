@@ -116,8 +116,8 @@ const createTodo = () => {
             if (priorityInput.checked) {
                 form1Value = priorityInput.value;
             }
-            currentActive.makeFalse();
             startAppend(titleInput.value, descriptionInput.value, dateInput.value, form1Value);
+            currentActive.makeFalse();
         } else {
             divReminder.innerHTML = '';
             divReminder.style.cssText = '';
@@ -328,9 +328,9 @@ const startAppend = (title, description, dueDate, priority) => {
             content.innerHTML = '';
         }
         let newList = createStorage(title, description, dueDate, priority, currentTabList);
-        checkLength();
         localStorage.setItem('list' + length, newList);
         saveTodo(newList);
+        checkLength();
         let i;
         for (i = 0; i < currentTab.length; i++) {
             appendTodo(i);
